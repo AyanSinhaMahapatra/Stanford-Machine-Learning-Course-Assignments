@@ -30,6 +30,52 @@ J = 0;
 Theta1_grad = zeros(size(Theta1));
 Theta2_grad = zeros(size(Theta2));
 
+% ---------- Part 1 -------------------------------------------------
+
+% Calculating the Activation Values
+a1 = [ones(m, 1) X];
+z2 = a1 * Theta1';
+a2 = [ones(size(z2), 1) sigmoid(z2)];
+z3 = a2 * Theta2';
+a3 = sigmoid(z3);
+J_init=a3;
+
+% Converting Y
+Y = zeros(m,num_labels);
+for c = 1:m
+  Y(c,y(c,:))=1;  
+end
+
+% Cost Function
+Reg = (lambda*(sum(sum(Theta1(:,2:end).^2))+sum(sum(Theta2(:,2:end).^2))))/(2*m);
+J = sum(sum(-(Y.*log(J_init))-((1-Y).*log(1-J_init)))) / m  + Reg;
+
+% ---------- Part 2 -------------------------------------------------
+
+for d = 1:m
+  % Step 1
+  a1 = [1 X(d,:)];
+  z2 = a1 * Theta1';
+  a2 = [1 sigmoid(z2)];
+  z3 = a2 * Theta2';
+  a3 = sigmoid(z3);
+  % Step 2
+  e = 1:num_labels;
+  y_temp = (y(d,:)==e);
+  delta_3 = a3-y_temp;
+  % Step 3
+  delta_2 = (delta_3*Theta2).*sigmoidGradient([1 z2]);
+  % Step 4
+  delta_2 = delta_2(2:size(Theta2,2));
+  Theta1_grad = Theta1_grad + (delta_2' * a1);
+  Theta2_grad = Theta2_grad + (delta_3' * a2);
+end
+
+
+Theta1_grad = (Theta1_grad + lambda.* [zeros(size(Theta1), 1) Theta1(:, 2:end)]) ./ m;
+Theta2_grad = (Theta2_grad + lambda.* [zeros(size(Theta2), 1) Theta2(:, 2:end)]) ./ m;
+
+
 % ====================== YOUR CODE HERE ======================
 % Instructions: You should complete the code by working through the
 %               following parts.

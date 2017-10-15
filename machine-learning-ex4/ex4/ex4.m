@@ -34,6 +34,9 @@ fprintf('Loading and Visualizing Data ...\n')
 
 load('ex4data1.mat');
 m = size(X, 1);
+disp(size(X))
+disp(size(y))
+
 
 % Randomly select 100 data points to display
 sel = randperm(size(X, 1));
@@ -56,6 +59,8 @@ load('ex4weights.mat');
 
 % Unroll parameters 
 nn_params = [Theta1(:) ; Theta2(:)];
+disp(size(nn_params))
+
 
 %% ================ Part 3: Compute Cost (Feedforward) ================
 %  To the neural network, you should first start by implementing the
